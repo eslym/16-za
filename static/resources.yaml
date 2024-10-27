@@ -18,7 +18,7 @@ actions:
   種植:
     description: 種植點數根據技能效果下一回合轉化為相應資源。
     items:
-      種植點數: 2
+      種子: 2
     bonus:
       種植: 1
   居住地:
@@ -83,25 +83,25 @@ actions:
     bonus:
       機械維修: 2
 
-deferred:
-  種植點數:
-    - checks:
-        預算管理: false
-        種植: false
-      result:
-        食物（易腐爛）: 3
-    - checks:
-        預算管理: true
-        種植: false
-      result:
-        食物（易腐爛）: 5
-    - checks:
-        預算管理: false
-        種植: true
-      result:
-        食物（易腐爛）: 6
-    - checks:
-        預算管理: true
-        種植: true
-      result:
-        食物（易腐爛）: 10
+# deferred:
+#   種植點數:
+#     - checks:
+#         預算管理: false
+#         種植: false
+#       result:
+#         食物（易腐爛）: 3
+#     - checks:
+#         預算管理: true
+#         種植: false
+#       result:
+#         食物（易腐爛）: 5
+#     - checks:
+#         預算管理: false
+#         種植: true
+#       result:
+#         食物（易腐爛）: 6
+#     - checks:
+#         預算管理: true
+#         種植: true
+#       result:
+#         食物（易腐爛）: 10
