@@ -1,5 +1,8 @@
 import { parse } from 'yaml';
 
+const dataSrc =
+	'https://gist.githubusercontent.com/eslym/de87a4c5eb665d3b26c4776b9211276b/raw/resources.yaml';
+
 type TextNumRecord = Record<string, number>;
 
 type Action = {
@@ -17,7 +20,7 @@ type Resources = {
 };
 
 export async function load({ fetch }) {
-	const res = await fetch('/resources.yaml');
+	const res = await fetch(dataSrc);
 	const data = await res.text();
 	const resources = parse(data) as Resources;
 
