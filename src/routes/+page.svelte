@@ -105,7 +105,13 @@
 <div class="form-group mt-4 grid grid-cols-2">
 	<div class="form-field">
 		<label for="input-points" class="form-label">兌換點數（行動點數）</label>
-		<Numbers id="input-points" class="max-w-xs font-mono" min={0} max={100} bind:value={$points} />
+		<Numbers
+			id="input-points"
+			class="max-w-xs font-mono"
+			min={spent}
+			max={100}
+			bind:value={$points}
+		/>
 	</div>
 	<div class="form-field">
 		<span class="form-label">剩餘點數</span>
