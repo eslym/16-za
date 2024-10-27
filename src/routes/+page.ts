@@ -6,6 +6,7 @@ type Action = {
 	description?: string;
 	items: TextNumRecord;
 	bonus: TextNumRecord;
+	requirements?: string[];
 };
 
 type Deffered = { checks: Record<string, boolean>; result: TextNumRecord }[];
@@ -20,11 +21,13 @@ export async function load({ fetch }) {
 	const data = await res.text();
 	const resources = parse(data) as Resources;
 
-	const skills = new Set(
-		Object.values(resources.actions)
-			.map((a) => Object.keys(a.bonus))
-			.flat()
-	);
+	const skills = [
+		...new Set(
+			Object.values(resources.actions)
+				.map((a) => Object.keys(a.bonus))
+				.flat()
+		)
+	];
 
 	const costs = Object.fromEntries(
 		Object.values(resources.actions)
@@ -32,9 +35,16 @@ export async function load({ fetch }) {
 			.flat()
 	);
 
+	const equipments = new Set(
+		Object.values(resources.actions)
+			.map((a) => a.requirements ?? [])
+			.flat()
+	);
+
 	return {
 		...resources,
 		skills,
-		costs
+		costs,
+		equipments
 	};
 }

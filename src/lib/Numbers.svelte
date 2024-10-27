@@ -7,6 +7,7 @@
 		max,
 		value = $bindable(0),
 		inline = true,
+		disabled = false,
 		class: klass = ''
 	}: {
 		id?: string;
@@ -14,6 +15,7 @@
 		max: number;
 		value: number;
 		inline?: boolean;
+		disabled?: boolean;
 		class?: string;
 	} = $props();
 
@@ -24,7 +26,11 @@
 </script>
 
 <div class="flex-row items-center gap-1 {klass}" class:flex={!inline} class:inline-flex={inline}>
-	<button class="btn w-10 items-center px-0" onclick={() => value--} disabled={value <= min}>
+	<button
+		class="btn w-10 items-center px-0"
+		onclick={() => value--}
+		disabled={disabled || value <= min}
+	>
 		<Remove01Icon size={20} />
 	</button>
 	<input
@@ -35,8 +41,13 @@
 		{max}
 		step="1"
 		bind:value
+		{disabled}
 	/>
-	<button class="btn w-10 items-center px-0" onclick={() => value++} disabled={value >= max}>
+	<button
+		class="btn w-10 items-center px-0"
+		onclick={() => value++}
+		disabled={disabled || value >= max}
+	>
 		<Add01Icon size={20} />
 	</button>
 </div>

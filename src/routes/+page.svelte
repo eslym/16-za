@@ -9,11 +9,12 @@
 
 	const points = json(local('16za-points'), 0);
 	const skills = json<string[]>(local('16za-skills'), []);
+	const equipments = json<string[]>(local('16za-equipments'), []);
 
 	let spent = $derived(Object.values(allocate).reduce((a, b) => a + b, 0));
 	let remain = $derived($points - spent);
 
-	$effect(() => $skills && reset());
+	$effect(() => $skills && $equipments && reset());
 
 	function reset() {
 		trade = Object.fromEntries(Object.keys(data.costs).map((key) => [key, 0]));
@@ -102,6 +103,22 @@
 		{/each}
 	</div>
 </fieldset>
+<fieldset class="mt-4">
+	<legend>設備</legend>
+	<div class="flex flex-wrap gap-x-2 gap-y-1">
+		{#each data.equipments as equipment}
+			{@const checked = $equipments.includes(equipment)}
+			<label
+				class="btn selection:transition-all"
+				class:opacity-60={!checked}
+				class:btn-solid-success={checked}
+			>
+				<input type="checkbox" class="hidden" bind:group={$equipments} value={equipment} />
+				{equipment}
+			</label>
+		{/each}
+	</div>
+</fieldset>
 <div class="form-group mt-4 grid grid-cols-2">
 	<div class="form-field">
 		<label for="input-points" class="form-label">兌換點數（行動點數）</label>
@@ -158,10 +175,22 @@
 		.reduce(sum, 0)}
 	{@const max = $points - rest}
 	{@const min = Math.ceil(spent / (1 + bonus))}
+	{@const eligible = (category.requirements ?? []).every((e) => $equipments.includes(e))}
 	<fieldset class="mt-4">
 		<legend>{cat}</legend>
+		{#if category.requirements?.length}
+			<p class="mx-2 mt-2 first:mt-0">
+				需要：
+				{#each category.requirements as req}
+					{@const has = $equipments.includes(req)}
+					<span class="badge" class:badge-flat-success={has} class:badge-flat-warning={!has}>
+						{req}
+					</span>
+				{/each}
+			</p>
+		{/if}
 		{#if category.description}
-			<p class="mx-2 text-content3">{category.description}</p>
+			<p class="mx-2 mt-2 text-content3 first:mt-0">{category.description}</p>
 		{/if}
 		<div class="form-group mt-2 grid grid-cols-3 max-sm:grid-cols-1">
 			<div class="form-field">
@@ -172,6 +201,7 @@
 					{min}
 					{max}
 					bind:value={allocate[cat]}
+					disabled={!eligible}
 				/>
 			</div>
 			<div class="form-field" class:opacity-35={!allocate[cat]}>
