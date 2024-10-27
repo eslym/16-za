@@ -126,7 +126,7 @@
 			id="input-points"
 			class="max-w-xs font-mono"
 			min={spent}
-			max={100}
+			max={100000}
 			bind:value={$points}
 		/>
 	</div>
