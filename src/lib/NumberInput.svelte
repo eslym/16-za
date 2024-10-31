@@ -3,25 +3,28 @@
 
 	let {
 		id = undefined,
-		min,
-		max,
+		min = undefined,
+		max = undefined,
 		value = $bindable(0),
 		inline = true,
 		disabled = false,
 		class: klass = ''
 	}: {
 		id?: string;
-		min: number;
-		max: number;
+		min?: number;
+		max?: number;
 		value: number;
 		inline?: boolean;
 		disabled?: boolean;
 		class?: string;
 	} = $props();
 
+	let minReached = $derived(min !== undefined && value <= min);
+	let maxReached = $derived(max !== undefined && value >= max);
+
 	$effect(() => {
-		if (value < min) value = min;
-		if (value > max) value = max;
+		if (typeof min !== 'undefined' && value < min) value = min;
+		if (typeof max !== 'undefined' && value > max) value = max;
 	});
 </script>
 
@@ -29,7 +32,7 @@
 	<button
 		class="btn w-10 items-center px-0"
 		onclick={() => value--}
-		disabled={disabled || value <= min}
+		disabled={disabled || minReached}
 	>
 		<Remove01Icon size={20} />
 	</button>
@@ -46,7 +49,7 @@
 	<button
 		class="btn w-10 items-center px-0"
 		onclick={() => value++}
-		disabled={disabled || value >= max}
+		disabled={disabled || maxReached}
 	>
 		<Add01Icon size={20} />
 	</button>
